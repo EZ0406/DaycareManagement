@@ -1,14 +1,11 @@
-CREATE DATABASE IF NOT EXISTS daycare_db;
-USE daycare_db;
-
 -- Table: students
 CREATE TABLE IF NOT EXISTS students (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
     dob DATE,
-    parent_name VARCHAR(255),
-    parent_email VARCHAR(255),
-    parent_phone VARCHAR(50),
+    parent_name TEXT,
+    parent_email TEXT,
+    parent_phone TEXT,
     enrollment_date DATE,
     tuition_due_date DATE,
     renewal_date DATE,
@@ -17,21 +14,21 @@ CREATE TABLE IF NOT EXISTS students (
 
 -- Table: staff
 CREATE TABLE IF NOT EXISTS staff (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
     hired_date DATE,
     pay_date DATE,
     certificate_expiration DATE,
     training_due_date DATE,
-    day_off VARCHAR(50),
+    day_off TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Table: reminders_log (future)
+-- Table: reminders_log
 CREATE TABLE IF NOT EXISTS reminders_log (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    type VARCHAR(50),
-    target_id INT,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type TEXT,
+    target_id INTEGER,
     sent_at TIMESTAMP,
-    status VARCHAR(50)
+    status TEXT
 );
