@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import StaffPage from './components/StaffPage';
+import StudentPage from './components/StudentPage';
 import './App.css';
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = React.useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [activePage, setActivePage] = useState<'staff' | 'students'>('staff');
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -15,13 +17,23 @@ function App() {
       <nav className="sidebar">
         <div className="logo">DaycarePro</div>
         <ul>
-          <li className="active">Staff</li>
-          <li>Students</li>
-          <li>Reminders</li>
+          <li 
+            className={activePage === 'staff' ? 'active' : ''} 
+            onClick={() => setActivePage('staff')}
+          >
+            Staff
+          </li>
+          <li 
+            className={activePage === 'students' ? 'active' : ''} 
+            onClick={() => setActivePage('students')}
+          >
+            Students
+          </li>
+          <li style={{ opacity: 0.5, cursor: 'not-allowed' }}>Reminders</li>
         </ul>
       </nav>
       <main className="main-content">
-        <StaffPage />
+        {activePage === 'staff' ? <StaffPage /> : <StudentPage />}
       </main>
       
       <button className="theme-toggle" onClick={toggleTheme}>
