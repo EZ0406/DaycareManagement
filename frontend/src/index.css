@@ -221,11 +221,11 @@ label {
 
 input {
   width: 100%;
-  background: rgba(15, 23, 42, 0.5);
+  background: var(--card-bg);
   border: 1px solid var(--border-color);
   padding: 0.75rem 1rem;
   border-radius: 8px;
-  color: white;
+  color: var(--text-color);
   font-size: 1rem;
 }
 
