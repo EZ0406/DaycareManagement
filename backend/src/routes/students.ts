@@ -53,4 +53,61 @@ router.post('/', async (req: Request, res: Response) => {
   }
 });
 
+// PUT /api/students/:id - Update a student
+router.put('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { 
+    name, 
+    dob, 
+    parent_name, 
+    parent_email, 
+    parent_phone, 
+    enrollment_date, 
+    tuition_due_date, 
+    renewal_date 
+  } = req.body;
+
+  if (!name) {
+    return res.status(400).json({ error: 'Name is required' });
+  }
+
+  try {
+    const db = await getDb();
+    const result = await db.run(
+      `UPDATE students SET 
+        name = ?, dob = ?, parent_name = ?, parent_email = ?, parent_phone = ?, 
+        enrollment_date = ?, tuition_due_date = ?, renewal_date = ?
+      WHERE id = ?`,
+      [name, dob, parent_name, parent_email, parent_phone, enrollment_date, tuition_due_date, renewal_date, id]
+    );
+
+    if (result.changes === 0) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+
+    res.json({ message: 'Student updated successfully' });
+  } catch (error) {
+    console.error('Error updating student:', error);
+    res.status(500).json({ error: 'Failed to update student profile' });
+  }
+});
+
+// DELETE /api/students/:id - Delete a student
+router.delete('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const db = await getDb();
+    const result = await db.run('DELETE FROM students WHERE id = ?', [id]);
+    
+    if (result.changes === 0) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+    
+    res.json({ message: 'Student deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting student:', error);
+    res.status(500).json({ error: 'Failed to delete student profile' });
+  }
+});
+
 export default router;

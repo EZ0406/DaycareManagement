@@ -15,12 +15,14 @@ interface Student {
 
 interface StudentListProps {
   students: Student[];
+  onEdit: (student: Student) => void;
+  onDelete: (id: number) => void;
 }
 
 type SortField = keyof Student;
 type SortOrder = 'asc' | 'desc';
 
-const StudentList: React.FC<StudentListProps> = ({ students }) => {
+const StudentList: React.FC<StudentListProps> = ({ students, onEdit, onDelete }) => {
   const [sortField, setSortField] = useState<SortField>('name');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
 
@@ -89,6 +91,7 @@ const StudentList: React.FC<StudentListProps> = ({ students }) => {
             <th>Contact</th>
             <th onClick={() => handleSort('tuition_due_date')}>Tuition Due {getSortIcon('tuition_due_date')}</th>
             <th onClick={() => handleSort('renewal_date')}>Renewal {getSortIcon('renewal_date')}</th>
+            <th style={{ textAlign: 'right' }}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -106,6 +109,24 @@ const StudentList: React.FC<StudentListProps> = ({ students }) => {
               </td>
               <td className={isRenewalDue(student.renewal_date) ? 'warning' : ''}>
                 {student.renewal_date || '-'}
+              </td>
+              <td>
+                <div className="action-buttons">
+                  <button 
+                    className="action-btn edit" 
+                    onClick={() => onEdit(student)}
+                    title="Edit Record"
+                  >
+                    ✏️
+                  </button>
+                  <button 
+                    className="action-btn delete" 
+                    onClick={() => onDelete(student.id)}
+                    title="Delete Record"
+                  >
+                    🗑️
+                  </button>
+                </div>
               </td>
             </tr>
           ))}

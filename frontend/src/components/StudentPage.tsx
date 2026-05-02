@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import StudentList from './StudentList';
-import AddStudentModal from './AddStudentModal';
+import StudentModal from './StudentModal';
+import DeleteConfirmModal from './DeleteConfirmModal';
 
 const StudentPage: React.FC = () => {
   const [students, setStudents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [editingStudent, setEditingStudent] = useState<any>(null);
+  const [deletingStudentId, setDeletingStudentId] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchStudents = async () => {
@@ -28,18 +32,54 @@ const StudentPage: React.FC = () => {
     fetchStudents();
   }, []);
 
-  const handleAddStudent = async (newStudent: any) => {
+  const handleOpenAddModal = () => {
+    setEditingStudent(null);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = (student: any) => {
+    setEditingStudent(student);
+    setIsModalOpen(true);
+  };
+
+  const handleOpenDeleteModal = (id: number) => {
+    setDeletingStudentId(id);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleSubmitStudent = async (studentData: any) => {
     try {
-      const response = await fetch('/api/students', {
-        method: 'POST',
+      const method = editingStudent ? 'PUT' : 'POST';
+      const url = editingStudent ? `/api/students/${editingStudent.id}` : '/api/students';
+      
+      const response = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newStudent)
+        body: JSON.stringify(studentData)
+      });
+      
+      if (response.ok) {
+        fetchStudents();
+        setIsModalOpen(false);
+      }
+    } catch (error) {
+      console.error('Error saving student:', error);
+    }
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deletingStudentId) return;
+    
+    try {
+      const response = await fetch(`/api/students/${deletingStudentId}`, {
+        method: 'DELETE'
       });
       if (response.ok) {
         fetchStudents();
+        setIsDeleteModalOpen(false);
       }
     } catch (error) {
-      console.error('Error adding student:', error);
+      console.error('Error deleting student:', error);
     }
   };
 
@@ -47,7 +87,7 @@ const StudentPage: React.FC = () => {
     <div className="page-content">
       <div className="page-header">
         <h1>Student Management</h1>
-        <button className="btn-primary" onClick={() => setIsModalOpen(true)}>
+        <button className="btn-primary" onClick={handleOpenAddModal}>
           + Add Student
         </button>
       </div>
@@ -55,13 +95,26 @@ const StudentPage: React.FC = () => {
       {loading ? (
         <div className="loader">Loading...</div>
       ) : (
-        <StudentList students={students} />
+        <StudentList 
+          students={students} 
+          onEdit={handleOpenEditModal}
+          onDelete={handleOpenDeleteModal}
+        />
       )}
 
-      <AddStudentModal 
+      <StudentModal 
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
-        onAdd={handleAddStudent} 
+        onSubmit={handleSubmitStudent}
+        initialData={editingStudent}
+      />
+
+      <DeleteConfirmModal
+        isOpen={isDeleteModalOpen}
+        title="Delete Student?"
+        message="Are you sure you want to remove this student? This action cannot be undone."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setIsDeleteModalOpen(false)}
       />
     </div>
   );
