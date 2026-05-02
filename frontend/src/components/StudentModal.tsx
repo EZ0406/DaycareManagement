@@ -1,13 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-interface AddStudentModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onAdd: (student: any) => void;
+interface Student {
+  id?: number;
+  name: string;
+  dob: string;
+  parent_name: string;
+  parent_email: string;
+  parent_phone: string;
+  enrollment_date: string;
+  tuition_due_date: string;
+  renewal_date: string;
 }
 
-const AddStudentModal: React.FC<AddStudentModalProps> = ({ isOpen, onClose, onAdd }) => {
-  const [formData, setFormData] = useState({
+interface StudentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (student: Student) => void;
+  initialData?: Student | null;
+}
+
+const StudentModal: React.FC<StudentModalProps> = ({ isOpen, onClose, onSubmit, initialData }) => {
+  const [formData, setFormData] = useState<Student>({
     name: '',
     dob: '',
     parent_name: '',
@@ -19,6 +32,24 @@ const AddStudentModal: React.FC<AddStudentModalProps> = ({ isOpen, onClose, onAd
   });
 
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+    } else {
+      setFormData({
+        name: '',
+        dob: '',
+        parent_name: '',
+        parent_email: '',
+        parent_phone: '',
+        enrollment_date: '',
+        tuition_due_date: '',
+        renewal_date: ''
+      });
+    }
+    setError('');
+  }, [initialData, isOpen]);
 
   if (!isOpen) return null;
 
@@ -33,24 +64,16 @@ const AddStudentModal: React.FC<AddStudentModalProps> = ({ isOpen, onClose, onAd
       return;
     }
     setError('');
-    onAdd(formData);
-    setFormData({
-      name: '',
-      dob: '',
-      parent_name: '',
-      parent_email: '',
-      parent_phone: '',
-      enrollment_date: '',
-      tuition_due_date: '',
-      renewal_date: ''
-    });
+    onSubmit(formData);
     onClose();
   };
+
+  const isEdit = !!initialData;
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>Add New Student</h2>
+        <h2>{isEdit ? 'Edit Student' : 'Add New Student'}</h2>
         {error && <div className="form-error">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-row">
@@ -132,7 +155,9 @@ const AddStudentModal: React.FC<AddStudentModalProps> = ({ isOpen, onClose, onAd
 
           <div className="modal-actions">
             <button type="button" className="btn-secondary" onClick={onClose}>Cancel</button>
-            <button type="submit" className="btn-primary">Add Student</button>
+            <button type="submit" className="btn-primary">
+              {isEdit ? 'Update Student' : 'Add Student'}
+            </button>
           </div>
         </form>
       </div>
@@ -140,4 +165,4 @@ const AddStudentModal: React.FC<AddStudentModalProps> = ({ isOpen, onClose, onAd
   );
 };
 
-export default AddStudentModal;
+export default StudentModal;
