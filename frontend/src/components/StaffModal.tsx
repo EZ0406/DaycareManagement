@@ -1,13 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
-interface AddStaffModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onAdd: (staff: any) => void;
+interface Staff {
+  id?: number;
+  name: string;
+  hired_date: string;
+  pay_date: string;
+  certificate_expiration: string;
+  training_due_date: string;
+  day_off: string;
 }
 
-const AddStaffModal: React.FC<AddStaffModalProps> = ({ isOpen, onClose, onAdd }) => {
-  const [formData, setFormData] = useState({
+interface StaffModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSubmit: (staff: Staff) => void;
+  initialData?: Staff | null;
+}
+
+const StaffModal: React.FC<StaffModalProps> = ({ isOpen, onClose, onSubmit, initialData }) => {
+  const [formData, setFormData] = useState<Staff>({
     name: '',
     hired_date: '',
     pay_date: '',
@@ -16,34 +27,36 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({ isOpen, onClose, onAdd })
     day_off: ''
   });
 
-  const [error, setError] = useState('');
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData(initialData);
+    } else {
+      setFormData({
+        name: '',
+        hired_date: '',
+        pay_date: '',
+        certificate_expiration: '',
+        training_due_date: '',
+        day_off: ''
+      });
+    }
+  }, [initialData, isOpen]);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim()) {
-      setError('Name is required');
-      return;
-    }
-    setError('');
-    onAdd(formData);
-    setFormData({
-      name: '',
-      hired_date: '',
-      pay_date: '',
-      certificate_expiration: '',
-      training_due_date: '',
-      day_off: ''
-    });
+    onSubmit(formData);
     onClose();
   };
+
+  const isEdit = !!initialData;
 
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>Add New Staff Member</h2>
-        {error && <div className="form-error">{error}</div>}
+        <h2>{isEdit ? 'Edit Staff Member' : 'Add New Staff Member'}</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Name</label>
@@ -101,7 +114,9 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({ isOpen, onClose, onAdd })
           </div>
           <div className="modal-actions">
             <button type="button" className="btn-secondary" onClick={onClose}>Cancel</button>
-            <button type="submit" className="btn-primary">Add Staff</button>
+            <button type="submit" className="btn-primary">
+              {isEdit ? 'Update Staff' : 'Add Staff'}
+            </button>
           </div>
         </form>
       </div>
@@ -109,4 +124,4 @@ const AddStaffModal: React.FC<AddStaffModalProps> = ({ isOpen, onClose, onAdd })
   );
 };
 
-export default AddStaffModal;
+export default StaffModal;

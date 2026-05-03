@@ -31,7 +31,6 @@ const StudentModal: React.FC<StudentModalProps> = ({ isOpen, onClose, onSubmit, 
     renewal_date: ''
   });
 
-  const [error, setError] = useState('');
 
   useEffect(() => {
     if (initialData) {
@@ -48,22 +47,12 @@ const StudentModal: React.FC<StudentModalProps> = ({ isOpen, onClose, onSubmit, 
         renewal_date: ''
       });
     }
-    setError('');
   }, [initialData, isOpen]);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name.trim()) {
-      setError('Student name is required');
-      return;
-    }
-    if (!formData.parent_email.trim()) {
-      setError('Parent email is required');
-      return;
-    }
-    setError('');
     onSubmit(formData);
     onClose();
   };
@@ -74,7 +63,6 @@ const StudentModal: React.FC<StudentModalProps> = ({ isOpen, onClose, onSubmit, 
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>{isEdit ? 'Edit Student' : 'Add New Student'}</h2>
-        {error && <div className="form-error">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="form-row">
             <div className="form-group">
