@@ -12,12 +12,14 @@ interface Staff {
 
 interface StaffListProps {
   staff: Staff[];
+  onEdit: (staff: Staff) => void;
+  onDelete: (id: number) => void;
 }
 
 type SortField = keyof Staff;
 type SortOrder = 'asc' | 'desc';
 
-const StaffList: React.FC<StaffListProps> = ({ staff }) => {
+const StaffList: React.FC<StaffListProps> = ({ staff, onEdit, onDelete }) => {
   const [sortField, setSortField] = useState<SortField>('name');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
 
@@ -55,6 +57,7 @@ const StaffList: React.FC<StaffListProps> = ({ staff }) => {
             <th onClick={() => handleSort('certificate_expiration')}>Cert. Exp. {getSortIcon('certificate_expiration')}</th>
             <th onClick={() => handleSort('training_due_date')}>Training Due {getSortIcon('training_due_date')}</th>
             <th onClick={() => handleSort('day_off')}>Day Off {getSortIcon('day_off')}</th>
+            <th style={{ textAlign: 'right' }}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -68,6 +71,24 @@ const StaffList: React.FC<StaffListProps> = ({ staff }) => {
               </td>
               <td>{person.training_due_date || '-'}</td>
               <td>{person.day_off || '-'}</td>
+              <td>
+                <div className="action-buttons">
+                  <button 
+                    className="action-btn edit" 
+                    onClick={() => onEdit(person)}
+                    title="Edit Record"
+                  >
+                    ✏️
+                  </button>
+                  <button 
+                    className="action-btn delete" 
+                    onClick={() => onDelete(person.id)}
+                    title="Delete Record"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </td>
             </tr>
           ))}
         </tbody>

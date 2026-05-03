@@ -37,9 +37,23 @@ const StudentPage: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const handleOpenEditModal = (student: any) => {
-    setEditingStudent(student);
-    setIsModalOpen(true);
+  const handleOpenEditModal = async (student: any) => {
+    try {
+      const response = await fetch(`/api/students/${student.id}`);
+      if (response.ok) {
+        const latestData = await response.json();
+        setEditingStudent(latestData);
+        setIsModalOpen(true);
+      } else {
+        console.error('Failed to fetch latest student data');
+        setEditingStudent(student);
+        setIsModalOpen(true);
+      }
+    } catch (error) {
+      console.error('Error fetching student:', error);
+      setEditingStudent(student);
+      setIsModalOpen(true);
+    }
   };
 
   const handleOpenDeleteModal = (id: number) => {

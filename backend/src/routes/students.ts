@@ -15,6 +15,22 @@ router.get('/', async (req: Request, res: Response) => {
   }
 });
 
+// GET /api/students/:id - Fetch single student
+router.get('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const db = await getDb();
+    const student = await db.get('SELECT * FROM students WHERE id = ?', [id]);
+    if (!student) {
+      return res.status(404).json({ error: 'Student not found' });
+    }
+    res.json(student);
+  } catch (error) {
+    console.error('Error fetching student:', error);
+    res.status(500).json({ error: 'Failed to fetch student' });
+  }
+});
+
 // POST /api/students - Add a new student
 router.post('/', async (req: Request, res: Response) => {
   const { 
