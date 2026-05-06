@@ -318,3 +318,175 @@ input:focus {
   color: var(--text-dim);
   font-weight: 500;
 }
+
+/* Dashboard Specific Styles */
+.dashboard-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+}
+
+.summary-card {
+  background: var(--card-bg);
+  backdrop-filter: var(--glass-effect);
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s;
+}
+
+.summary-card:hover {
+  transform: translateY(-4px);
+}
+
+.card-icon {
+  font-size: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+}
+
+.card-info h3 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.card-info p {
+  color: var(--text-dim);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.upcoming-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge.tuition {
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.badge.certificate {
+  background: rgba(16, 185, 129, 0.15);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.urgent-tag {
+  background: #fb7185;
+  color: white;
+  font-size: 0.7rem;
+  padding: 0.125rem 0.4rem;
+  border-radius: 4px;
+  margin-left: 0.75rem;
+  vertical-align: middle;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.range-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.range-selector label {
+  margin-bottom: 0;
+  font-weight: 500;
+}
+
+.range-selector select {
+  background: var(--card-bg);
+  backdrop-filter: var(--glass-effect);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+}
+
+.range-selector select:focus {
+  border-color: var(--primary-color);
+}
+
+.overdue-alert-bar {
+  background: rgba(251, 113, 133, 0.15);
+  border: 1px solid rgba(251, 113, 133, 0.3);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #fb7185;
+  font-weight: 500;
+  animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+  0% { border-color: rgba(251, 113, 133, 0.3); }
+  50% { border-color: rgba(251, 113, 133, 0.8); }
+  100% { border-color: rgba(251, 113, 133, 0.3); }
+}
+
+.status-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.status-tag.overdue {
+  background: #fb7185;
+  color: white;
+}
+
+.status-tag.due-soon {
+  background: #f59e0b;
+  color: white;
+}
+
+.status-tag.upcoming {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-dim);
+}
+
+tr.overdue {
+  background: rgba(251, 113, 133, 0.05);
+}
+
+tr.due-soon {
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.summary-card.has-overdue {
+  border-color: rgba(251, 113, 133, 0.5);
+}

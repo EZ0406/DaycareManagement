@@ -6,7 +6,7 @@
 
 ### Front End
 
-#### Dashboard
+#### Home Page
 - **Component 1: SummaryCards**
   - Shows:
     - Upcoming payments (next 3 days)
