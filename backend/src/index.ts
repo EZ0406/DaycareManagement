@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import staffRoutes from './routes/staff';
 import studentRoutes from './routes/students';
+import remindersRoutes from './routes/reminders';
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use('/api/staff', staffRoutes);
 app.use('/api/students', studentRoutes);
+app.use('/api/reminders', remindersRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Daycare Management API is running...');

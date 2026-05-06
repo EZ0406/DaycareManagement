@@ -13,6 +13,10 @@ A record of mistakes made during development, their impact, and how they were re
 | **Hardcoded Color Tokens** | Form inputs were invisible or unreadable in Light Mode. | Switched hardcoded `white` to `var(--text-color)` in `index.css`. | **AI** |
 | **Inconsistent Code Structure** | Harder to maintain and compare parallel features (Staff vs Student). | Standardized naming and function ordering across Page components. | **Human** |
 | **Stale Data (Race Condition)** | Users could edit outdated information if another user changed it. | Implemented **Fetch-on-Edit** pattern in modals. | **Human** |
+| **Ambiguous Summary Labels** | Users confused by "Due Soon" card including overdue items. | Renamed cards to "Action Required" / "Actions" for clarity. | **Human** |
+| **UI Highlighting Redundancy** | Table looked cluttered with both status tags and colored dates. | Removed date highlighting in favor of clear status tags. | **Human** |
+| **Status Slug Inconsistency** | CSS failed to apply when status names had spaces (e.g., "Due Soon"). | Implemented `.replace(' ', '-')` for status-based CSS classes. | **AI** |
+| **Rigid Date Filters** | Users couldn't see all upcoming tasks without hardcoding ranges. | Modified API to support default "All" view with optional filters. | **Human** |
 | **Redundant Validation Logic** | Bloated code with repetitive trim() checks and JS errors. | Removed manual JS checks in favor of native browser `required` attribute. | **Human** |
 
 ## Summary of Best Practices for this Project

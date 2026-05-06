@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import StaffPage from './components/StaffPage';
 import StudentPage from './components/StudentPage';
+import HomePage from './components/HomePage';
 import './App.css';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [activePage, setActivePage] = useState<'staff' | 'students'>('staff');
+  const [activePage, setActivePage] = useState<'home' | 'staff' | 'students'>('home');
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -18,6 +19,12 @@ function App() {
         <div className="logo">DaycarePro</div>
         <ul>
           <li 
+            className={activePage === 'home' ? 'active' : ''} 
+            onClick={() => setActivePage('home')}
+          >
+            Home
+          </li>
+          <li 
             className={activePage === 'staff' ? 'active' : ''} 
             onClick={() => setActivePage('staff')}
           >
@@ -29,11 +36,12 @@ function App() {
           >
             Students
           </li>
-          <li style={{ opacity: 0.5, cursor: 'not-allowed' }}>Reminders</li>
         </ul>
       </nav>
       <main className="main-content">
-        {activePage === 'staff' ? <StaffPage /> : <StudentPage />}
+        {activePage === 'home' && <HomePage />}
+        {activePage === 'staff' && <StaffPage />}
+        {activePage === 'students' && <StudentPage />}
       </main>
       
       <button className="theme-toggle" onClick={toggleTheme}>
