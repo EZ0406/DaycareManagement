@@ -41,7 +41,8 @@ router.post('/', async (req: Request, res: Response) => {
     parent_phone, 
     enrollment_date, 
     tuition_due_date, 
-    renewal_date 
+    renewal_date,
+    tuition_amount 
   } = req.body;
 
   if (!name) {
@@ -53,15 +54,15 @@ router.post('/', async (req: Request, res: Response) => {
     const result = await db.run(
       `INSERT INTO students (
         name, dob, parent_name, parent_email, parent_phone, 
-        enrollment_date, tuition_due_date, renewal_date
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [name, dob, parent_name, parent_email, parent_phone, enrollment_date, tuition_due_date, renewal_date]
+        enrollment_date, tuition_due_date, renewal_date, tuition_amount
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [name, dob, parent_name, parent_email, parent_phone, enrollment_date, tuition_due_date, renewal_date, tuition_amount]
     );
 
     res.status(201).json({ 
       id: result.lastID, 
       name, dob, parent_name, parent_email, parent_phone, 
-      enrollment_date, tuition_due_date, renewal_date 
+      enrollment_date, tuition_due_date, renewal_date, tuition_amount 
     });
   } catch (error) {
     console.error('Error adding student:', error);
@@ -80,7 +81,8 @@ router.put('/:id', async (req: Request, res: Response) => {
     parent_phone, 
     enrollment_date, 
     tuition_due_date, 
-    renewal_date 
+    renewal_date,
+    tuition_amount
   } = req.body;
 
   if (!name) {
@@ -92,9 +94,9 @@ router.put('/:id', async (req: Request, res: Response) => {
     const result = await db.run(
       `UPDATE students SET 
         name = ?, dob = ?, parent_name = ?, parent_email = ?, parent_phone = ?, 
-        enrollment_date = ?, tuition_due_date = ?, renewal_date = ?
+        enrollment_date = ?, tuition_due_date = ?, renewal_date = ?, tuition_amount = ?
       WHERE id = ?`,
-      [name, dob, parent_name, parent_email, parent_phone, enrollment_date, tuition_due_date, renewal_date, id]
+      [name, dob, parent_name, parent_email, parent_phone, enrollment_date, tuition_due_date, renewal_date, tuition_amount, id]
     );
 
     if (result.changes === 0) {

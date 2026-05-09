@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS students (
     enrollment_date DATE,
     tuition_due_date DATE,
     renewal_date DATE,
+    tuition_amount DECIMAL(10,2),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

@@ -11,6 +11,7 @@ interface Student {
   enrollment_date: string;
   tuition_due_date: string;
   renewal_date: string;
+  tuition_amount?: number;
 }
 
 interface StudentListProps {
@@ -79,6 +80,13 @@ const StudentList: React.FC<StudentListProps> = ({ students, onEdit, onDelete })
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     return diffDays <= 7; // Warning if 7 days or less (including overdue)
   };
+  const formatCurrency = (amount?: number) => {
+    if (amount === undefined || amount === null) return '-';
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount);
+  };
 
   return (
     <div className="table-container">
@@ -90,6 +98,7 @@ const StudentList: React.FC<StudentListProps> = ({ students, onEdit, onDelete })
             <th>Parent</th>
             <th>Contact</th>
             <th onClick={() => handleSort('tuition_due_date')}>Tuition Due {getSortIcon('tuition_due_date')}</th>
+            <th>Amount</th>
             <th onClick={() => handleSort('renewal_date')}>Renewal {getSortIcon('renewal_date')}</th>
             <th style={{ textAlign: 'right' }}>Actions</th>
           </tr>
@@ -106,6 +115,9 @@ const StudentList: React.FC<StudentListProps> = ({ students, onEdit, onDelete })
               </td>
               <td className={isDueSoon(student.tuition_due_date) ? 'warning' : ''}>
                 {student.tuition_due_date || '-'}
+              </td>
+              <td style={{ fontWeight: 500, color: 'var(--text-primary)' }}>
+                {formatCurrency(student.tuition_amount)}
               </td>
               <td className={isRenewalDue(student.renewal_date) ? 'warning' : ''}>
                 {student.renewal_date || '-'}

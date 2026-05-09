@@ -10,6 +10,7 @@ interface Student {
   enrollment_date: string;
   tuition_due_date: string;
   renewal_date: string;
+  tuition_amount?: number | string;
 }
 
 interface StudentModalProps {
@@ -28,8 +29,10 @@ const StudentModal: React.FC<StudentModalProps> = ({ isOpen, onClose, onSubmit, 
     parent_phone: '',
     enrollment_date: '',
     tuition_due_date: '',
-    renewal_date: ''
+    renewal_date: '',
+    tuition_amount: ''
   });
+  const [error, setError] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -44,15 +47,25 @@ const StudentModal: React.FC<StudentModalProps> = ({ isOpen, onClose, onSubmit, 
         parent_phone: '',
         enrollment_date: '',
         tuition_due_date: '',
-        renewal_date: ''
+        renewal_date: '',
+        tuition_amount: ''
       });
     }
+    setError(null);
   }, [initialData, isOpen]);
 
   if (!isOpen) return null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validation
+    if (formData.tuition_amount !== '' && Number(formData.tuition_amount) < 0) {
+      setError('Tuition amount cannot be negative');
+      return;
+    }
+
+    setError(null);
     onSubmit(formData);
     onClose();
   };
@@ -132,14 +145,29 @@ const StudentModal: React.FC<StudentModalProps> = ({ isOpen, onClose, onSubmit, 
             </div>
           </div>
 
-          <div className="form-group">
-            <label>Renewal Date</label>
-            <input 
-              type="date" 
-              value={formData.renewal_date}
-              onChange={(e) => setFormData({...formData, renewal_date: e.target.value})}
-            />
+          <div className="form-row">
+            <div className="form-group">
+              <label>Renewal Date</label>
+              <input 
+                type="date" 
+                value={formData.renewal_date}
+                onChange={(e) => setFormData({...formData, renewal_date: e.target.value})}
+              />
+            </div>
+            <div className="form-group">
+              <label>Tuition Amount ($)</label>
+              <input 
+                type="number" 
+                step="0.01"
+                min="0"
+                placeholder="0.00"
+                value={formData.tuition_amount}
+                onChange={(e) => setFormData({...formData, tuition_amount: e.target.value})}
+              />
+            </div>
           </div>
+
+          {error && <div className="form-error">{error}</div>}
 
           <div className="modal-actions">
             <button type="button" className="btn-secondary" onClick={onClose}>Cancel</button>
