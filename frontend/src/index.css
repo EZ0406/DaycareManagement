@@ -8,6 +8,12 @@
   --text-dim: #94a3b8;
   --border-color: rgba(255, 255, 255, 0.1);
   --glass-effect: blur(12px) saturate(180%);
+  
+  /* Badge Colors */
+  --badge-tuition-bg: rgba(99, 102, 241, 0.15);
+  --badge-tuition-text: #a5b4fc;
+  --badge-cert-bg: rgba(16, 185, 129, 0.15);
+  --badge-cert-text: #6ee7b7;
 }
 
 .light-theme {
@@ -16,8 +22,14 @@
   --card-bg: rgba(255, 255, 255, 0.8);
   --text-color: #1e293b;
   --text-dim: #64748b;
-  --border-color: rgba(0, 0, 0, 0.05);
+  --border-color: rgba(0, 0, 0, 0.08);
   --glass-effect: blur(10px);
+
+  /* Light Theme Badge Colors */
+  --badge-tuition-bg: rgba(79, 70, 229, 0.1);
+  --badge-tuition-text: #4338ca;
+  --badge-cert-bg: rgba(5, 150, 105, 0.1);
+  --badge-cert-text: #065f46;
 }
 
 * {
@@ -309,6 +321,17 @@ input[type=number] {
   font-size: 0.875rem;
 }
 
+.light-theme .action-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.light-theme .action-btn:hover {
+  background: #312e81;
+  border-color: #312e81;
+}
+
 .action-btn:hover {
   background: var(--primary-color);
   border-color: var(--primary-color);
@@ -397,15 +420,15 @@ input[type=number] {
 }
 
 .badge.tuition {
-  background: rgba(99, 102, 241, 0.15);
-  color: #a5b4fc;
-  border: 1px solid rgba(99, 102, 241, 0.2);
+  background: var(--badge-tuition-bg);
+  color: var(--badge-tuition-text);
+  border: 1px solid var(--badge-tuition-bg);
 }
 
 .badge.certificate {
-  background: rgba(16, 185, 129, 0.15);
-  color: #6ee7b7;
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  background: var(--badge-cert-bg);
+  color: var(--badge-cert-text);
+  border: 1px solid var(--badge-cert-bg);
 }
 
 .urgent-tag {
