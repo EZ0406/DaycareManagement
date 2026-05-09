@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS staff (
     certificate_expiration DATE,
     training_due_date DATE,
     day_off TEXT,
+    email TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

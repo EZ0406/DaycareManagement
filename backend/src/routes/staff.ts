@@ -39,7 +39,8 @@ router.post('/', async (req: Request, res: Response) => {
     pay_date, 
     certificate_expiration, 
     training_due_date, 
-    day_off 
+    day_off,
+    email
   } = req.body;
 
   if (!name) {
@@ -49,12 +50,12 @@ router.post('/', async (req: Request, res: Response) => {
   try {
     const db = await getDb();
     const result = await db.run(
-      `INSERT INTO staff (name, hired_date, pay_date, certificate_expiration, training_due_date, day_off)
-       VALUES (?, ?, ?, ?, ?, ?)`,
-      [name, hired_date, pay_date, certificate_expiration, training_due_date, day_off]
+      `INSERT INTO staff (name, hired_date, pay_date, certificate_expiration, training_due_date, day_off, email)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [name, hired_date, pay_date, certificate_expiration, training_due_date, day_off, email]
     );
 
-    res.status(201).json({ id: result.lastID, name, hired_date, pay_date, certificate_expiration, training_due_date, day_off });
+    res.status(201).json({ id: result.lastID, name, hired_date, pay_date, certificate_expiration, training_due_date, day_off, email });
   } catch (error) {
     console.error('Error adding staff:', error);
     res.status(500).json({ error: 'Failed to add staff member' });
@@ -70,7 +71,8 @@ router.put('/:id', async (req: Request, res: Response) => {
     pay_date, 
     certificate_expiration, 
     training_due_date, 
-    day_off 
+    day_off,
+    email
   } = req.body;
 
   if (!name) {
@@ -82,9 +84,9 @@ router.put('/:id', async (req: Request, res: Response) => {
     const result = await db.run(
       `UPDATE staff SET 
         name = ?, hired_date = ?, pay_date = ?, 
-        certificate_expiration = ?, training_due_date = ?, day_off = ?
+        certificate_expiration = ?, training_due_date = ?, day_off = ?, email = ?
       WHERE id = ?`,
-      [name, hired_date, pay_date, certificate_expiration, training_due_date, day_off, id]
+      [name, hired_date, pay_date, certificate_expiration, training_due_date, day_off, email, id]
     );
 
     if (result.changes === 0) {

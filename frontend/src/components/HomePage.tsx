@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import ReminderModal from './ReminderModal';
 
 interface ReminderItem {
   id: number;
   name: string;
   date: string;
   type: 'Tuition' | 'Certificate';
-  status: 'Overdue' | 'Urgent' | 'Upcoming';
+  status: 'Overdue' | 'Due Soon' | 'Upcoming';
 }
 
 interface SummaryData {
@@ -19,6 +20,10 @@ const HomePage: React.FC = () => {
   const [details, setDetails] = useState<ReminderItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [daysLimit, setDaysLimit] = useState<number | 'all'>('all');
+  
+  // Reminder Modal State
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reminderData, setReminderData] = useState<{ recipient: string, subject: string, body: string } | null>(null);
 
   useEffect(() => {
     const fetchReminders = async () => {
@@ -40,6 +45,35 @@ const HomePage: React.FC = () => {
 
     fetchReminders();
   }, [daysLimit]);
+
+  const handleTakeAction = async (item: ReminderItem) => {
+    try {
+      const endpoint = item.type === 'Tuition' ? `/api/students/${item.id}` : `/api/staff/${item.id}`;
+      const response = await fetch(endpoint);
+      const data = await response.json();
+
+      let recipient = '';
+      let subject = '';
+      let body = '';
+
+      if (item.type === 'Tuition') {
+        recipient = data.parent_email || '';
+        subject = `Tuition Reminder: ${item.name}`;
+        const amount = data.tuition_amount ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(data.tuition_amount) : '[Amount]';
+        body = `Dear ${data.parent_name || 'Parent'},\n\nThis is a friendly reminder that the tuition payment for ${item.name} is ${item.status.toLowerCase()} (Due: ${item.date}).\n\nAmount Due: ${amount}\n\nPlease settle this at your earliest convenience. Thank you for your cooperation.\n\nBest regards,\nDaycare Management`;
+      } else {
+        recipient = data.email || '';
+        subject = `Certificate Renewal Reminder: ${data.name}`;
+        body = `Hi ${data.name},\n\nThis is a reminder that your certificate is set to expire on ${item.date}.\n\nPlease ensure you complete the renewal process before the expiration date to maintain your active status.\n\nBest regards,\nDaycare Management`;
+      }
+
+      setReminderData({ recipient, subject, body });
+      setIsModalOpen(true);
+    } catch (error) {
+      console.error('Error generating reminder:', error);
+      alert('Failed to generate reminder template.');
+    }
+  };
 
   return (
     <div className="page-content">
@@ -102,12 +136,13 @@ const HomePage: React.FC = () => {
                     <th>Type</th>
                     <th>Date</th>
                     <th>Status</th>
+                    <th>Take Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {details.length === 0 ? (
                     <tr>
-                      <td colSpan={4} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-dim)' }}>
+                      <td colSpan={5} style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-dim)' }}>
                         No upcoming events for the {daysLimit === 'all' ? 'foreseeable future' : `next ${daysLimit} days`}.
                       </td>
                     </tr>
@@ -128,6 +163,15 @@ const HomePage: React.FC = () => {
                             {item.status}
                           </span>
                         </td>
+                        <td>
+                          <button 
+                            className="action-btn" 
+                            onClick={() => handleTakeAction(item)}
+                            title="Generate Reminder Email"
+                          >
+                            ✉️
+                          </button>
+                        </td>
                       </tr>
                     ))
                   )}
@@ -137,6 +181,12 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       )}
+
+      <ReminderModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        data={reminderData} 
+      />
     </div>
   );
 };

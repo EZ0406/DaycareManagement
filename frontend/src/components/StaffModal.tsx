@@ -8,6 +8,7 @@ interface Staff {
   certificate_expiration: string;
   training_due_date: string;
   day_off: string;
+  email: string;
 }
 
 interface StaffModalProps {
@@ -24,7 +25,8 @@ const StaffModal: React.FC<StaffModalProps> = ({ isOpen, onClose, onSubmit, init
     pay_date: '',
     certificate_expiration: '',
     training_due_date: '',
-    day_off: ''
+    day_off: '',
+    email: ''
   });
 
 
@@ -38,7 +40,8 @@ const StaffModal: React.FC<StaffModalProps> = ({ isOpen, onClose, onSubmit, init
         pay_date: '',
         certificate_expiration: '',
         training_due_date: '',
-        day_off: ''
+        day_off: '',
+        email: ''
       });
     }
   }, [initialData, isOpen]);
@@ -65,6 +68,16 @@ const StaffModal: React.FC<StaffModalProps> = ({ isOpen, onClose, onSubmit, init
               required 
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
+            />
+          </div>
+          <div className="form-group">
+            <label>Email</label>
+            <input 
+              type="email" 
+              required
+              placeholder="staff@example.com"
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
             />
           </div>
           <div className="form-row">

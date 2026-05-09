@@ -8,6 +8,7 @@ interface Staff {
   certificate_expiration: string;
   training_due_date: string;
   day_off: string;
+  email?: string;
 }
 
 interface StaffListProps {
@@ -57,6 +58,7 @@ const StaffList: React.FC<StaffListProps> = ({ staff, onEdit, onDelete }) => {
             <th onClick={() => handleSort('certificate_expiration')}>Cert. Exp. {getSortIcon('certificate_expiration')}</th>
             <th onClick={() => handleSort('training_due_date')}>Training Due {getSortIcon('training_due_date')}</th>
             <th onClick={() => handleSort('day_off')}>Day Off {getSortIcon('day_off')}</th>
+            <th>Email</th>
             <th style={{ textAlign: 'right' }}>Actions</th>
           </tr>
         </thead>
@@ -71,6 +73,7 @@ const StaffList: React.FC<StaffListProps> = ({ staff, onEdit, onDelete }) => {
               </td>
               <td>{person.training_due_date || '-'}</td>
               <td>{person.day_off || '-'}</td>
+              <td style={{ fontSize: '0.85rem' }}>{person.email || '-'}</td>
               <td>
                 <div className="action-buttons">
                   <button 
