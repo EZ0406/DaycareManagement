@@ -19,7 +19,7 @@ const HomePage: React.FC = () => {
   const [summary, setSummary] = useState<SummaryData>({ payments: 0, expirations: 0, overdue: 0 });
   const [details, setDetails] = useState<ReminderItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [daysLimit, setDaysLimit] = useState<number | 'all'>('all');
+  const [daysLimit, setDaysLimit] = useState<number | 'all'>(7);
   
   // Reminder Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
