@@ -1,0 +1,27 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: daycare-backend
+    ports:
+      - "5001:5001"
+    environment:
+      - PORT=5001
+      - DB_PATH=/app/database/daycare.sqlite
+      - NODE_ENV=development
+    volumes:
+      # Persists SQLite database on the host machine
+      - ./database:/app/database
+    restart: unless-stopped
+
+# Optional: If you want to containerize the frontend as well:
+#  frontend:
+#    build:
+#      context: ./frontend
+#      dockerfile: Dockerfile
+#    container_name: daycare-frontend
+#    ports:
+#      - "5173:5173"
+#    depends_on:
+#      - backend

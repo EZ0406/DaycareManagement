@@ -10,9 +10,9 @@ let db: Database;
 export async function getDb() {
   if (!db) {
     // This finds the absolute path to the project root, then goes to /database/daycare.sqlite
-    const dbPath = path.resolve(__dirname, '../../../database/daycare.sqlite');
+    const dbPath = process.env.DB_PATH || path.resolve(__dirname, '../../../database/daycare.sqlite');
     console.log('Connecting to database at:', dbPath);
-    
+
     db = await open({
       filename: dbPath,
       driver: sqlite3.Database
